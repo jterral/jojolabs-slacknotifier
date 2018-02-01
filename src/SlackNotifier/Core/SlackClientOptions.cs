@@ -9,7 +9,12 @@ namespace JojoLabs.SlackNotifier.Core
 
         public SlackClientOptions(Uri slackUri)
         {
-            SlackUri = slackUri;
+            SlackUri = slackUri ?? throw new ArgumentNullException(nameof(slackUri));
+        }
+
+        public SlackClientOptions(string slackUri)
+        {
+            SlackUri = !string.IsNullOrEmpty(slackUri) ? new Uri(slackUri) : throw new ArgumentNullException(nameof(slackUri));
         }
     }
 }
