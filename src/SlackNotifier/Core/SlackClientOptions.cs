@@ -5,16 +5,16 @@ namespace JojoLabs.SlackNotifier.Core
 {
     public class SlackClientOptions : ISlackClientOptions
     {
-        public Uri SlackUri { get; private set; }
+        public Uri Webhook { get; private set; }
 
-        public SlackClientOptions(Uri slackUri)
+        public SlackClientOptions(Uri webhook)
         {
-            SlackUri = slackUri ?? throw new ArgumentNullException(nameof(slackUri));
+            Webhook = webhook ?? throw new ArgumentNullException(nameof(webhook));
         }
 
         public SlackClientOptions(string slackUri)
         {
-            SlackUri = !string.IsNullOrEmpty(slackUri) ? new Uri(slackUri) : throw new ArgumentNullException(nameof(slackUri));
+            Webhook = !string.IsNullOrEmpty(slackUri) ? new Uri(slackUri) : throw new ArgumentNullException(nameof(slackUri));
         }
     }
 }
