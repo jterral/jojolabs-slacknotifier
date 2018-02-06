@@ -14,8 +14,7 @@ namespace JojoLabs.SlackNotifier.Tests
         {
             // Arrange
             SlackClient client = new SlackClient("");
-            SlackMessage msg = new SlackMessage();
-            msg.Message = Guid.NewGuid().ToString();
+            SlackMessage msg = new SlackMessage(Guid.NewGuid().ToString());
 
             await client.SlackAsync(msg);
         }

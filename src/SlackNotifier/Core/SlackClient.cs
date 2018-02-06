@@ -1,21 +1,19 @@
-﻿using JojoLabs.SlackNotifier.Core.Interfaces;
-using JojoLabs.SlackNotifier.Exceptions;
-using JojoLabs.SlackNotifier.Models;
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using JojoLabs.SlackNotifier.Core.Interfaces;
+using JojoLabs.SlackNotifier.Exceptions;
+using JojoLabs.SlackNotifier.Models;
+using Newtonsoft.Json;
 
 namespace JojoLabs.SlackNotifier.Core
 {
     /// <summary>
     /// Slack client implementation.
     /// </summary>
-    /// <seealso cref="ISlackClient" />
+    /// <seealso cref="ISlackClient"/>
     public class SlackClient : ISlackClient
     {
         /// <summary>
@@ -23,6 +21,10 @@ namespace JojoLabs.SlackNotifier.Core
         /// </summary>
         private static readonly HttpClient _httpClient = new HttpClient();
 
+        /// <summary>
+        /// Gets or sets the options.
+        /// </summary>
+        /// <value>The options.</value>
         public SlackClientOptions Options { get; set; }
 
         /// <summary>
@@ -43,7 +45,7 @@ namespace JojoLabs.SlackNotifier.Core
         /// <summary>
         /// Initializes a new instance of the <see cref="SlackClient"/> class.
         /// </summary>
-        /// <param name="webhook">The webhook.</param>
+        /// <param name="webhook">The webhook url.</param>
         public SlackClient(Uri webhook)
             : this(new SlackClientOptions(webhook))
         {
@@ -52,29 +54,31 @@ namespace JojoLabs.SlackNotifier.Core
         /// <summary>
         /// Initializes a new instance of the <see cref="SlackClient"/> class.
         /// </summary>
-        /// <param name="webhook">The webhook.</param>
+        /// <param name="webhook">The webhook url.</param>
         public SlackClient(string webhook)
             : this(new SlackClientOptions(webhook))
         {
         }
 
-        public async Task SlackAsync(SlackMessage message, string channel = null)
+        /// <summary>
+        /// Sends a Slack message.
+        /// </summary>
+        /// <param name="message">The message.</param>
+        /// <param name="channel">The channel name where to send the message, or if not present the default channel.</param>
+        /// <returns>The sent task.</returns>
+        public async Task SlackAsync(SlackMessage message)
         {
+            // Get the channel name
+
+            // TODO: serialize SlackMessage object
             var model = new { channel = "#general", text = message.Message };
-            // var model = new { text = message.Message };
             var request = new StringContent(JsonConvert.SerializeObject(model), Encoding.UTF8, "application/json");
-            //var request = new StringContent("{\"text\": \"BLABLA\"}", Encoding.UTF8, "application/json");
 
             var response = await _httpClient.PostAsync(Options.Webhook, request);
             if (!response.IsSuccessStatusCode)
             {
                 throw new SlackException(await response.Content.ReadAsStringAsync());
             }
-        }
-
-        public Task SlackAsync(SlackMessage message, IEnumerable<string> channels)
-        {
-            throw new NotImplementedException();
         }
     }
 }

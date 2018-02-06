@@ -4,6 +4,7 @@
     <TargetFramework>netcoreapp2.0</TargetFramework>
     <AssemblyName>JojoLabs.SlackNotifier</AssemblyName>
     <RootNamespace>JojoLabs.SlackNotifier</RootNamespace>
+    <Version>0.1.0</Version>
   </PropertyGroup>
 
   <ItemGroup>
