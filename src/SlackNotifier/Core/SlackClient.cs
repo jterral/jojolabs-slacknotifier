@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -68,12 +69,15 @@ namespace JojoLabs.SlackNotifier.Core
         /// <returns>The sent task.</returns>
         public async Task SlackAsync(SlackMessage message)
         {
-            // Get the channel name
+            // Serialize Slack Message
+            string json = JsonConvert.SerializeObject(message, Formatting.Indented);
 
-            // TODO: serialize SlackMessage object
-            var model = new { channel = "#general", text = message.Message };
-            var request = new StringContent(JsonConvert.SerializeObject(model), Encoding.UTF8, "application/json");
+            Debug.WriteLine(json);
 
+            // Create request
+            var request = new StringContent(json, Encoding.UTF8, "application/json");
+
+            // Post request
             var response = await _httpClient.PostAsync(Options.Webhook, request);
             if (!response.IsSuccessStatusCode)
             {

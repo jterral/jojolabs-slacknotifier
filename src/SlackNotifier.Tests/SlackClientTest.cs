@@ -14,9 +14,15 @@ namespace JojoLabs.SlackNotifier.Tests
         {
             // Arrange
             SlackClient client = new SlackClient("");
-            SlackMessage msg = new SlackMessage(Guid.NewGuid().ToString());
+            SlackMessage msg = "Sent from Unit Test.";
+            msg.Channel = "#general";
+            msg.Username = "jojobot";
+            msg.Emoji = ":smile:";
 
+            // Act
             await client.SlackAsync(msg);
+
+            // Assert
         }
     }
 }
